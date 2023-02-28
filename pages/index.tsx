@@ -6,11 +6,7 @@ import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-	const [state, setState] = useState()
 
-	useEffect(() => {
-		console.log(state)
-	}, [])
 	return (
 		<div className={styles.container}>
 			<Head>
