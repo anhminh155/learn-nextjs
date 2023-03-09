@@ -9,9 +9,12 @@ export interface PostDetailPageProps {
 
 export default function PostDetailPage({ todo, ...props }: PostDetailPageProps) {
 	const router = useRouter()
+	
+	if (router.isFallback) {
+		return <div>Loading...</div>
+	}
+	
 	if (!todo) return null
-
-	console.log(todo)
 
 	return (
 		<div>
@@ -28,12 +31,12 @@ export default function PostDetailPage({ todo, ...props }: PostDetailPageProps) 
 
 export const getStaticPaths: GetStaticPaths = async () => {
 	console.log('\nGet static paths')
-	const response = await fetch('https://jsonplaceholder.typicode.com/todos')
+	const response = await fetch('https://js-post-api.herokuapp.com/api/posts?_page=1')
 	const data = await response.json()
 
 	return {
-		paths: data.map((todo: any) => ({ params: { postId: (todo.id).toString() } })),
-		fallback: false,
+		paths: data.data.map((todo: any) => ({ params: { postId: todo.id.toString() } })),
+		fallback: true,
 	}
 }
 
@@ -44,12 +47,13 @@ export const getStaticProps: GetStaticProps<PostDetailPageProps> = async (
 	const postId = ctx.params?.postId
 	if (!postId) return { notFound: true }
 
-	const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${postId}`)
+	const response = await fetch(`https://js-post-api.herokuapp.com/api/posts/${postId}`)
 	const data = await response.json()
 
 	return {
 		props: {
 			todo: data,
 		},
+		revalidate: 5,
 	}
 }

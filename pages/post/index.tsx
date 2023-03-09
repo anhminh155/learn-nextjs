@@ -12,7 +12,7 @@ export default function PostList({ data, ...props }: PostListPageProps) {
 			Post List Page
 			<ul>
 				{data?.map((d: any) => (
-					<Link key={d.id} href={`post/${d.id}`}>
+					<Link style={{ margin: '20px' }} key={d.id} href={`post/${d.id}`}>
 						<li>Id: {d.id}</li>
 						<li>Title: {d.title}</li>
 					</Link>
@@ -31,11 +31,11 @@ export default function PostList({ data, ...props }: PostListPageProps) {
 export const getStaticProps: GetStaticProps<PostListPageProps> = async (
 	ctx: GetStaticPropsContext
 ) => {
-	const response = await fetch('https://jsonplaceholder.typicode.com/todos').then((response) =>
-		response.json()
+	const response = await fetch('https://js-post-api.herokuapp.com/api/posts?_page=1').then(
+		(response) => response.json()
 	)
 
-	const data = await response
+	const data = await response.data
 
 	return {
 		props: {

@@ -2,12 +2,14 @@ import * as React from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { MainLayout } from 'components/layout'
+import { GetStaticProps } from 'next'
 
 const Header = dynamic(() => import('components/common/header'), { ssr: false })
 
 export interface AboutPageProps {}
 
-export default function About(props: AboutPageProps) {
+export default function AboutPage(props: AboutPageProps) {
 	const router = useRouter()
 	const [todoList, setTodoList] = React.useState<any>()
 	const page = router.query.page
@@ -49,4 +51,17 @@ export default function About(props: AboutPageProps) {
 			<Header />
 		</div>
 	)
+}
+
+AboutPage.Layout = MainLayout
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+	// const { data } = await  // your fetch function here 
+	console.log('get static props');
+	
+	return {
+		props: {
+			
+		}
+	}
 }
