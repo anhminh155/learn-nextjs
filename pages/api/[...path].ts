@@ -10,11 +10,18 @@ export const config = {
 const proxy = httpProxy.createProxyServer()
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-	//Don's send cookies to API server
-	req.headers.cookie = ''
-	proxy.web(req, res, {
-		target: process.env.API_URL,
-		changeOrigin: true,
-		selfHandleResponse: false,
+	return new Promise((resolve) => {
+		//Don's send cookies to API server
+		req.headers.cookie = ''
+		proxy.web(req, res, {
+			target: process.env.API_URL,
+			changeOrigin: true,
+			selfHandleResponse: false,
+		})
+
+        //Handle issue API resolved without sending a response in Next js
+		proxy.once('proxyRes', () => {            
+			resolve(true)
+		})
 	})
 }
